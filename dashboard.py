@@ -307,7 +307,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .heatmap-tooltip .tt-val { color: var(--text-primary); font-weight: 500; }
   .heatmap-tooltip .tt-sub { color: var(--text-tertiary); margin-top: 4px; }
   .heatmap-cell[data-level="0"] { background: rgba(255,255,255,0.02); }
-  .heatmap-cell[data-level="1"] { background: rgba(96,165,250,0.30);  border-color: rgba(96,165,250,0.40); }  /* input blue */
+  .heatmap-cell[data-level="1"] { background: rgba(59,130,246,0.38);  border-color: rgba(59,130,246,0.50); }  /* input sonnet blue */
   .heatmap-cell[data-level="2"] { background: rgba(167,139,250,0.55); border-color: rgba(167,139,250,0.70); } /* output violet */
   .heatmap-cell[data-level="3"] { background: rgba(52,211,153,0.75);  border-color: rgba(52,211,153,0.85); }  /* cache read emerald */
   .heatmap-cell[data-level="4"] { background: rgba(251,191,36,0.95);  border-color: rgba(251,191,36,1.0); }   /* cache creation amber */
@@ -337,7 +337,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .session-detail .field .v { font-size: 13px; color: var(--text-primary); font-family: var(--font-mono); letter-spacing: -0.13px; }
   .session-detail .bar { grid-column: 1 / -1; display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--surface-ghost); border: 1px solid var(--border-subtle); margin-top: 4px; }
   .session-detail .bar > span { display: block; height: 100%; }
-  .session-detail .bar .b-input   { background: #60a5fa; }
+  .session-detail .bar .b-input   { background: #3b82f6; }
   .session-detail .bar .b-output  { background: #a78bfa; }
   .session-detail .bar .b-cread   { background: #34d399; }
   .session-detail .bar .b-ccreate { background: #fbbf24; }
@@ -454,7 +454,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <span>Less</span>
         <div class="swatches">
           <div class="sw" data-level="0" style="background: rgba(255,255,255,0.02);"></div>
-          <div class="sw" style="background: rgba(96,165,250,0.30);"></div>
+          <div class="sw" style="background: rgba(59,130,246,0.38);"></div>
           <div class="sw" style="background: rgba(167,139,250,0.55);"></div>
           <div class="sw" style="background: rgba(52,211,153,0.75);"></div>
           <div class="sw" style="background: rgba(251,191,36,0.95);"></div>
@@ -596,13 +596,13 @@ function fmtCostBig(c) { return '$' + c.toFixed(2); }
 // Multi-hue data palette — saturated, high-contrast on dark. Mixes cool + warm
 // for real category separation. Brand indigo is reserved for chrome (logo, focus).
 const TOKEN_COLORS = {
-  input:          '#60a5fa',  // sky blue
+  input:          '#3b82f6',  // sonnet blue
   output:         '#a78bfa',  // violet
   cache_read:     '#34d399',  // emerald
   cache_creation: '#fbbf24',  // amber
 };
 // Four brand colors only. If there are more than 4 models, the palette cycles.
-const MODEL_COLORS = ['#60a5fa', '#a78bfa', '#34d399', '#fbbf24'];
+const MODEL_COLORS = ['#3b82f6', '#a78bfa', '#34d399', '#fbbf24'];
 const TICK_COLOR = '#62666d';
 const GRID_COLOR = 'rgba(255,255,255,0.05)';
 

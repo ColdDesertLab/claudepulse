@@ -2,6 +2,12 @@
 
 All notable changes to claudepulse will be documented here.
 
+## [1.1.1] - 2026-04-08
+
+### Changed
+- **Input blue** swapped from sky-400 (`#60a5fa`) to sonnet blue (`#3b82f6`) across the entire palette — Daily Token Usage stack, heatmap level-1, session-detail mini-bar, cost efficiency chart, and model doughnut. Richer, warmer, more on-brand with Claude Sonnet.
+- Heatmap level-1 opacity bumped 0.30 → 0.38 so low-activity cells read as a proper blue instead of a muted haze.
+
 ## [1.1.0] - 2026-04-08
 
 ### Added
