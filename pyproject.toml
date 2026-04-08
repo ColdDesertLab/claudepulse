@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "claudepulse"
+version = "1.0.2"
+description = "Local dashboard for Claude Code token usage, sessions, and cost estimates. Dark UI."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+authors = [
+    { name = "ColdDesertLab" }
+]
+keywords = ["claude", "claude-code", "usage", "dashboard", "tokens", "cost", "pulse"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/ColdDesertLab/claudepulse"
+Repository = "https://github.com/ColdDesertLab/claudepulse"
+Issues = "https://github.com/ColdDesertLab/claudepulse/issues"
+
+[project.scripts]
+claudepulse = "cli:main"
+
+[tool.setuptools]
+py-modules = ["cli", "scanner", "dashboard"]
