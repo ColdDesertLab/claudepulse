@@ -2,6 +2,17 @@
 
 All notable changes to claudepulse will be documented here.
 
+## [1.1.0] - 2026-04-08
+
+### Added
+- **Cost Efficiency chart** — new horizontal bar card showing effective `$/1K output tokens` per model, sorted cheapest first. Answers which model is actually cheapest to *operate* with your prompt+cache patterns, not just the pricing table.
+- **Heatmap hover tooltip** — rich floating tooltip on each cell showing day, hour range, exact turn count, and token estimate. Hovered cell scales up with a white ring; non-hovered cells dim to 38% opacity for focus. Row label highlights.
+- **Heatmap summary line** — "Peak: Thu 14:00 · 892 turns · Busiest day: Wednesday · 11.5K turns total". Dense signal right under the legend.
+- **Heatmap click-to-filter** — click any cell to filter the Recent Sessions table to sessions active during that day-of-week + hour. Click again to toggle off, or use the "clear hour filter" link in the summary.
+
+### Changed
+- **Heatmap gradient** now matches the Daily Token Usage stack order exactly: blue → violet → emerald → amber (input → output → cache read → cache creation). Full palette consistency across both charts.
+
 ## [1.0.2] - 2026-04-08
 
 ### Added

@@ -280,15 +280,37 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .export-btn .icon { font-size: 11px; opacity: 0.7; }
 
   /* Heatmap */
-  .heatmap-wrap { display: flex; flex-direction: column; gap: 6px; padding: 4px 0; }
+  .heatmap-wrap { display: flex; flex-direction: column; gap: 6px; padding: 4px 0; position: relative; }
+  .heatmap-wrap.is-hovering .heatmap-cell:not(.is-hover) { opacity: 0.38; transition: opacity 0.12s; }
   .heatmap-row { display: grid; grid-template-columns: 36px repeat(24, 1fr); gap: 3px; align-items: center; }
-  .heatmap-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-quaternary); text-align: right; padding-right: 6px; font-weight: 400; }
-  .heatmap-cell { aspect-ratio: 1; border-radius: 3px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); min-height: 14px; }
+  .heatmap-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-quaternary); text-align: right; padding-right: 6px; font-weight: 400; transition: color 0.12s; }
+  .heatmap-label.is-hover { color: var(--text-primary); }
+  .heatmap-cell { aspect-ratio: 1; border-radius: 3px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); min-height: 14px; transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s; cursor: pointer; }
+  .heatmap-cell.is-hover { transform: scale(1.25); box-shadow: 0 0 0 1.5px rgba(255,255,255,0.45), 0 6px 14px rgba(0,0,0,0.5); z-index: 2; position: relative; opacity: 1 !important; }
+  .heatmap-summary { margin-top: 14px; padding: 10px 14px; border-radius: 8px; background: var(--surface-ghost); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); letter-spacing: -0.06px; display: flex; flex-wrap: wrap; gap: 18px; }
+  .heatmap-summary strong { color: var(--text-primary); font-weight: 500; }
+  .heatmap-summary .clear-hour { margin-left: auto; color: var(--accent-bright); cursor: pointer; text-decoration: none; border-bottom: 1px solid rgba(113,112,255,0.4); }
+  .heatmap-summary .clear-hour:hover { color: var(--text-primary); border-bottom-color: var(--text-primary); }
+  /* Floating tooltip */
+  .heatmap-tooltip {
+    position: fixed; pointer-events: none; z-index: 50;
+    background: var(--bg-surface-2); border: 1px solid var(--border-strong); border-radius: 8px;
+    padding: 10px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--text-primary);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05) inset;
+    transform: translate(-50%, calc(-100% - 10px));
+    opacity: 0; transition: opacity 0.08s;
+    white-space: nowrap;
+    letter-spacing: -0.06px;
+  }
+  .heatmap-tooltip.visible { opacity: 1; }
+  .heatmap-tooltip .tt-label { color: var(--text-tertiary); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; display: block; }
+  .heatmap-tooltip .tt-val { color: var(--text-primary); font-weight: 500; }
+  .heatmap-tooltip .tt-sub { color: var(--text-tertiary); margin-top: 4px; }
   .heatmap-cell[data-level="0"] { background: rgba(255,255,255,0.02); }
-  .heatmap-cell[data-level="1"] { background: rgba(96,165,250,0.30);  border-color: rgba(96,165,250,0.40); }   /* blue */
-  .heatmap-cell[data-level="2"] { background: rgba(52,211,153,0.55);  border-color: rgba(52,211,153,0.65); }  /* emerald */
-  .heatmap-cell[data-level="3"] { background: rgba(167,139,250,0.72); border-color: rgba(167,139,250,0.85); } /* violet */
-  .heatmap-cell[data-level="4"] { background: rgba(251,191,36,0.95);  border-color: rgba(251,191,36,1.0); }    /* amber */
+  .heatmap-cell[data-level="1"] { background: rgba(96,165,250,0.30);  border-color: rgba(96,165,250,0.40); }  /* input blue */
+  .heatmap-cell[data-level="2"] { background: rgba(167,139,250,0.55); border-color: rgba(167,139,250,0.70); } /* output violet */
+  .heatmap-cell[data-level="3"] { background: rgba(52,211,153,0.75);  border-color: rgba(52,211,153,0.85); }  /* cache read emerald */
+  .heatmap-cell[data-level="4"] { background: rgba(251,191,36,0.95);  border-color: rgba(251,191,36,1.0); }   /* cache creation amber */
   .heatmap-axis { display: grid; grid-template-columns: 36px repeat(24, 1fr); gap: 3px; margin-top: 4px; font-family: var(--font-mono); font-size: 9px; color: var(--text-quaternary); }
   .heatmap-axis span { text-align: center; }
   .heatmap-legend { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-family: var(--font-mono); font-size: 10px; color: var(--text-quaternary); }
@@ -420,6 +442,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <h2>Top Projects by Tokens</h2>
       <div class="chart-wrap"><canvas id="chart-project"></canvas></div>
     </div>
+    <div class="chart-card">
+      <h2>Cost Efficiency &mdash; $/1K output tokens</h2>
+      <div class="chart-wrap"><canvas id="chart-efficiency"></canvas></div>
+    </div>
     <div class="chart-card wide">
       <h2>Activity Heatmap &mdash; when you work</h2>
       <div id="heatmap" class="heatmap-wrap"></div>
@@ -429,14 +455,16 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <div class="swatches">
           <div class="sw" data-level="0" style="background: rgba(255,255,255,0.02);"></div>
           <div class="sw" style="background: rgba(96,165,250,0.30);"></div>
-          <div class="sw" style="background: rgba(52,211,153,0.55);"></div>
-          <div class="sw" style="background: rgba(167,139,250,0.72);"></div>
+          <div class="sw" style="background: rgba(167,139,250,0.55);"></div>
+          <div class="sw" style="background: rgba(52,211,153,0.75);"></div>
           <div class="sw" style="background: rgba(251,191,36,0.95);"></div>
         </div>
         <span>More</span>
       </div>
+      <div id="heatmap-summary" class="heatmap-summary"></div>
     </div>
   </div>
+  <div class="heatmap-tooltip" id="heatmap-tooltip"></div>
   <div class="table-card">
     <div class="table-header">
       <div class="section-title">Recent Sessions</div>
@@ -511,6 +539,7 @@ let lastByModel = [];
 let expandedSessionId = null;
 let lastFetchAt = 0;
 let lastFetchOk = true;
+let selectedHour = null;  // { dow: 0-6 (Mon=0..Sun=6), hour: 0-23 } or null
 
 // ── Pricing (Anthropic API, April 2026) ────────────────────────────────────
 const PRICING = {
@@ -724,10 +753,19 @@ function applyFilter() {
     m.turns          += r.turns;
   }
 
-  // Filter sessions by model + date range
-  const filteredSessions = rawData.sessions_all.filter(s =>
-    selectedModels.has(s.model) && (!cutoff || s.last_date >= cutoff)
-  );
+  // Filter sessions by model + date range (+ optional heatmap hour filter)
+  const filteredSessions = rawData.sessions_all.filter(s => {
+    if (!selectedModels.has(s.model)) return false;
+    if (cutoff && s.last_date < cutoff) return false;
+    if (selectedHour) {
+      // s.last is "YYYY-MM-DD HH:MM"
+      const d = new Date((s.last || '').replace(' ', 'T') + 'Z');
+      if (isNaN(d)) return false;
+      if (d.getUTCDay() !== selectedHour.dow) return false;
+      if (d.getUTCHours() !== selectedHour.hour) return false;
+    }
+    return true;
+  });
 
   // Add session counts into modelMap
   for (const s of filteredSessions) {
@@ -795,6 +833,7 @@ function applyFilter() {
   renderDailyChart(daily);
   renderModelChart(byModel);
   renderProjectChart(byProject);
+  renderEfficiencyChart(byModel);
   renderHeatmap();
   renderSessionsTable();
   renderModelCostTable(byModel);
@@ -1012,23 +1051,107 @@ function renderSessionsTable() {
   });
 }
 
+// ── Cost efficiency chart ──────────────────────────────────────────────────
+function renderEfficiencyChart(byModel) {
+  const ctx = document.getElementById('chart-efficiency').getContext('2d');
+  if (charts.efficiency) charts.efficiency.destroy();
+
+  // Effective $/1K output tokens = total_cost / (output / 1000).
+  // Only billable models with >0 output are comparable.
+  const rows = byModel
+    .filter(m => isBillable(m.model) && (m.output || 0) > 0)
+    .map(m => {
+      const cost = calcCost(m.model, m.input, m.output, m.cache_read, m.cache_creation);
+      return {
+        model: m.model,
+        rate: (m.output > 0) ? (cost / m.output) * 1000 : 0,
+        cost: cost,
+      };
+    })
+    .sort((a, b) => a.rate - b.rate);  // cheapest first
+
+  if (rows.length === 0) {
+    // Draw empty state: a faint message in the canvas
+    const canvas = ctx.canvas;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#62666d';
+    ctx.font = '12px "JetBrains Mono", ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('No billable output in this window', canvas.width / 2, canvas.height / 2);
+    return;
+  }
+
+  charts.efficiency = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: rows.map(r => r.model),
+      datasets: [{
+        label: '$/1K output',
+        data: rows.map(r => r.rate),
+        backgroundColor: rows.map((_, i) => MODEL_COLORS[i % MODEL_COLORS.length]),
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (item) => {
+              const row = rows[item.dataIndex];
+              return `$${row.rate.toFixed(4)} per 1K output  ·  total ${fmtCostBig(row.cost)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: TICK_COLOR, callback: (v) => '$' + (+v).toFixed(3) },
+          grid: { color: GRID_COLOR },
+        },
+        y: {
+          ticks: { color: TICK_COLOR, font: { size: 11 } },
+          grid: { color: GRID_COLOR },
+        }
+      }
+    }
+  });
+}
+
 // ── Heatmap ────────────────────────────────────────────────────────────────
-const DOW_LABELS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DOW_LABELS     = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DOW_LABELS_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
 function renderHeatmap() {
   if (!rawData || !rawData.hourly_by_model) return;
   const cutoff = getRangeCutoff(selectedRange);
-  // 7 rows (dow) x 24 cols (hour), value = turns
-  const grid = Array.from({length: 7}, () => Array(24).fill(0));
+  // 7 rows (native Sun=0..Sat=6) x 24 cols. turns + tokens.
+  const turnsGrid  = Array.from({length: 7}, () => Array(24).fill(0));
+  const tokensGrid = Array.from({length: 7}, () => Array(24).fill(0));
+  let totalTurns = 0;
   for (const r of rawData.hourly_by_model) {
     if (!selectedModels.has(r.model)) continue;
     if (cutoff && r.day < cutoff) continue;
     const dow = new Date(r.day + 'T00:00:00Z').getUTCDay();
     if (Number.isNaN(dow)) continue;
-    grid[dow][r.hour] += r.turns;
+    turnsGrid[dow][r.hour]  += r.turns;
+    tokensGrid[dow][r.hour] += r.tokens;
+    totalTurns += r.turns;
   }
-  // Reorder to Mon..Sun for UI (move index 0 Sun to the end)
-  const ordered = [1,2,3,4,5,6,0].map(i => ({ label: DOW_LABELS[i], row: grid[i] }));
-  // Compute max for bucketing
+  // UI order: Mon..Sun
+  const uiOrder = [1,2,3,4,5,6,0];
+  const ordered = uiOrder.map((i, ui) => ({
+    label: DOW_LABELS[i],
+    labelLong: DOW_LABELS_LONG[i],
+    nativeDow: i,
+    uiIdx: ui,
+    row: turnsGrid[i],
+    tokens: tokensGrid[i],
+  }));
   let max = 0;
   for (const { row } of ordered) for (const v of row) if (v > max) max = v;
   const level = (v) => {
@@ -1039,17 +1162,101 @@ function renderHeatmap() {
     if (f <= 0.65) return 3;
     return 4;
   };
+
   const wrap = document.getElementById('heatmap');
-  wrap.innerHTML = ordered.map(({ label, row }) => `
-    <div class="heatmap-row">
-      <div class="heatmap-label">${label}</div>
-      ${row.map((v, h) => `<div class="heatmap-cell" data-level="${level(v)}" title="${label} ${String(h).padStart(2,'0')}:00 — ${v} turn${v===1?'':'s'}"></div>`).join('')}
+  wrap.innerHTML = ordered.map(({ label, row, nativeDow }, ui) => `
+    <div class="heatmap-row" data-ui="${ui}">
+      <div class="heatmap-label" data-ui="${ui}">${label}</div>
+      ${row.map((v, h) => `<div class="heatmap-cell" data-level="${level(v)}" data-dow="${nativeDow}" data-ui="${ui}" data-hour="${h}" data-turns="${v}" data-tokens="${ordered[ui].tokens[h]}"></div>`).join('')}
     </div>
   `).join('');
+
   const axis = document.getElementById('heatmap-axis');
-  // Show every 3 hours as label, others blank
   const hours = Array.from({length: 24}, (_, h) => h);
   axis.innerHTML = '<span></span>' + hours.map(h => `<span>${h % 3 === 0 ? String(h).padStart(2,'0') : ''}</span>`).join('');
+
+  // ── Summary: peak cell + busiest day ────────────────────────────────────
+  let peak = { v: 0, dow: null, hour: null, label: '', tokens: 0 };
+  const dayTotals = new Array(7).fill(0);
+  ordered.forEach(({ label, row, tokens, nativeDow }) => {
+    let dayTotal = 0;
+    row.forEach((v, h) => {
+      dayTotal += v;
+      if (v > peak.v) peak = { v, dow: nativeDow, hour: h, label, tokens: tokens[h] };
+    });
+    dayTotals[nativeDow] = dayTotal;
+  });
+  const busiestDowNative = dayTotals.indexOf(Math.max(...dayTotals));
+  const summary = document.getElementById('heatmap-summary');
+  if (totalTurns === 0) {
+    summary.innerHTML = `<span>No activity in this window.</span>`;
+  } else {
+    const hrStr = (h) => String(h).padStart(2, '0') + ':00';
+    const peakStr   = peak.v > 0 ? `<strong>${peak.label} ${hrStr(peak.hour)}</strong> &middot; ${fmt(peak.v)} turns &middot; ${fmt(peak.tokens)} tokens` : '—';
+    const busyStr   = `<strong>${DOW_LABELS_LONG[busiestDowNative]}</strong> &middot; ${fmt(dayTotals[busiestDowNative])} turns`;
+    const totalStr  = `<strong>${fmt(totalTurns)}</strong> turns total`;
+    const clearLink = selectedHour ? `<a class="clear-hour" onclick="clearHourFilter()">clear hour filter</a>` : '';
+    summary.innerHTML = `
+      <span>Peak: ${peakStr}</span>
+      <span>Busiest day: ${busyStr}</span>
+      <span>${totalStr}</span>
+      ${clearLink}
+    `;
+  }
+
+  // ── Hover: tooltip + focus + row/label highlight ────────────────────────
+  const tooltip = document.getElementById('heatmap-tooltip');
+  const cells = wrap.querySelectorAll('.heatmap-cell');
+  cells.forEach(cell => {
+    cell.addEventListener('mouseenter', (e) => {
+      wrap.classList.add('is-hovering');
+      cell.classList.add('is-hover');
+      const ui = cell.dataset.ui;
+      wrap.querySelector(`.heatmap-label[data-ui="${ui}"]`)?.classList.add('is-hover');
+      const turns  = +cell.dataset.turns;
+      const tokens = +cell.dataset.tokens;
+      const dowNative = +cell.dataset.dow;
+      const hour = +cell.dataset.hour;
+      const dayLong = DOW_LABELS_LONG[dowNative];
+      const hrStr = String(hour).padStart(2, '0') + ':00';
+      const nextHrStr = String((hour + 1) % 24).padStart(2, '0') + ':00';
+      tooltip.innerHTML = `
+        <span class="tt-label">${dayLong} &middot; ${hrStr}–${nextHrStr}</span>
+        <div><span class="tt-val">${fmt(turns)}</span> turn${turns === 1 ? '' : 's'}</div>
+        <div class="tt-sub">${fmt(tokens)} tokens &middot; click to filter sessions</div>
+      `;
+      tooltip.classList.add('visible');
+      positionHeatmapTooltip(e);
+    });
+    cell.addEventListener('mousemove', positionHeatmapTooltip);
+    cell.addEventListener('mouseleave', () => {
+      wrap.classList.remove('is-hovering');
+      cell.classList.remove('is-hover');
+      wrap.querySelectorAll('.heatmap-label.is-hover').forEach(l => l.classList.remove('is-hover'));
+      tooltip.classList.remove('visible');
+    });
+    cell.addEventListener('click', () => {
+      const dow = +cell.dataset.dow;
+      const hour = +cell.dataset.hour;
+      if (selectedHour && selectedHour.dow === dow && selectedHour.hour === hour) {
+        selectedHour = null;
+      } else {
+        selectedHour = { dow, hour };
+      }
+      applyFilter();
+    });
+  });
+}
+
+function positionHeatmapTooltip(e) {
+  const tt = document.getElementById('heatmap-tooltip');
+  tt.style.left = e.clientX + 'px';
+  tt.style.top  = e.clientY + 'px';
+}
+
+function clearHourFilter() {
+  selectedHour = null;
+  applyFilter();
 }
 
 // ── CSV export ─────────────────────────────────────────────────────────────
