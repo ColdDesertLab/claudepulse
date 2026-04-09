@@ -2,6 +2,13 @@
 
 All notable changes to claudepulse will be documented here.
 
+## [1.1.4] - 2026-04-09
+
+### Changed
+- Heatmap colors pushed fully bright and flat to match the rest of the app: dark blue was replaced with the bright Claude Sonnet blue, and all active levels now use the same vivid dashboard palette without muddy overlays.
+- Heatmap base cells simplified to a clean dark neutral, with lighter white hover/selected rings so the colors stay crisp.
+- Screenshot refreshed to reflect the brighter heatmap treatment.
+
 ## [1.1.3] - 2026-04-09
 
 ### Changed
