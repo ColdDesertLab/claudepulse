@@ -2,6 +2,13 @@
 
 All notable changes to claudepulse will be documented here.
 
+## [1.1.5] - 2026-04-09
+
+### Changed
+- Final polish pass: chart tick contrast lifted, grid lines nudged clearer, table body text brightened slightly, and the hero tightened so the dashboard gets to the point faster.
+- Heatmap legend wording clarified from a vague Less/More scale to Lower activity / Higher activity.
+- Screenshot refreshed to reflect the polished layout.
+
 ## [1.1.4] - 2026-04-09
 
 ### Changed

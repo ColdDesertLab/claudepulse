@@ -187,10 +187,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   header .meta .refresh-btn:hover { color: var(--text-primary); background: var(--surface-subtle); }
   @keyframes pulse-fresh { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.88); } }
 
-  .hero { max-width: 1280px; margin: 0 auto; padding: 80px 32px 64px; }
-  .hero-eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.08em; }
-  .hero-title { font-family: var(--font-sans); font-size: 56px; font-weight: 510; line-height: 1.0; letter-spacing: -1.232px; color: var(--text-primary); margin-bottom: 20px; font-feature-settings: "cv01", "ss03"; }
-  .hero-sub { font-size: 18px; line-height: 1.60; color: var(--text-tertiary); max-width: 640px; margin-bottom: 32px; letter-spacing: -0.165px; }
+  .hero { max-width: 1280px; margin: 0 auto; padding: 64px 32px 48px; }
+  .hero-eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .hero-title { font-family: var(--font-sans); font-size: 52px; font-weight: 510; line-height: 1.0; letter-spacing: -1.12px; color: var(--text-primary); margin-bottom: 16px; font-feature-settings: "cv01", "ss03"; }
+  .hero-sub { font-size: 17px; line-height: 1.58; color: var(--text-tertiary); max-width: 640px; margin-bottom: 26px; letter-spacing: -0.15px; }
   .command-block { display: inline-flex; align-items: center; gap: 14px; padding: 14px 20px; border: 1px solid var(--border-standard); border-radius: 8px; background: var(--surface-ghost); font-family: var(--font-mono); font-size: 14px; color: var(--text-primary); }
   .command-block .prompt { color: var(--text-quaternary); user-select: none; }
 
@@ -236,6 +236,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   table { width: 100%; border-collapse: collapse; }
   th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 510; color: var(--text-tertiary); border-bottom: 1px solid var(--border-standard); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-sans); }
   td { padding: 12px 14px; border-bottom: 1px solid var(--border-subtle); font-size: 13px; color: var(--text-secondary); letter-spacing: -0.13px; }
+  tbody td { color: #c7ced9; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--surface-ghost); }
   .model-tag { display: inline-block; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-family: var(--font-mono); font-weight: 510; background: transparent; border: 1px solid var(--border-solid); color: var(--text-secondary); }
@@ -453,7 +454,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <div id="heatmap" class="heatmap-wrap"></div>
       <div class="heatmap-axis" id="heatmap-axis"></div>
       <div class="heatmap-legend">
-        <span>Less</span>
+        <span>Lower activity</span>
         <div class="swatches">
           <div class="sw" data-level="0" style="background: #17181b;"></div>
           <div class="sw" style="background: #3b82f6;"></div>
@@ -461,7 +462,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <div class="sw" style="background: #34d399;"></div>
           <div class="sw" style="background: #fbbf24;"></div>
         </div>
-        <span>More</span>
+        <span>Higher activity</span>
       </div>
       <div id="heatmap-summary" class="heatmap-summary"></div>
     </div>
@@ -619,8 +620,8 @@ const TOKEN_COLORS = {
 };
 // Four brand colors only. If there are more than 4 models, the palette cycles.
 const MODEL_COLORS = ['#3b82f6', '#a78bfa', '#34d399', '#fbbf24'];
-const TICK_COLOR = '#62666d';
-const GRID_COLOR = 'rgba(255,255,255,0.05)';
+const TICK_COLOR = '#8a8f98';
+const GRID_COLOR = 'rgba(255,255,255,0.06)';
 
 // ── Time range ─────────────────────────────────────────────────────────────
 const RANGE_LABELS = { '7d': 'Last 7 Days', '30d': 'Last 30 Days', '90d': 'Last 90 Days', 'all': 'All Time' };

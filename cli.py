@@ -280,7 +280,7 @@ Usage:
   claudepulse --version  Show version
 """
 
-__version__ = "1.1.4"
+__version__ = "1.1.5"
 
 COMMANDS = {
     "scan": cmd_scan,
