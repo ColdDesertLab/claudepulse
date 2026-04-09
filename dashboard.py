@@ -227,9 +227,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 64px; }
   .chart-card { background: var(--surface-ghost); border: 1px solid var(--border-standard); border-radius: 12px; padding: 24px; }
   .chart-card.wide { grid-column: 1 / -1; }
+  .chart-card.compact { padding-bottom: 18px; }
   .chart-card h2 { font-family: var(--font-sans); font-size: 15px; font-weight: 590; color: var(--text-primary); margin-bottom: 20px; letter-spacing: -0.165px; font-feature-settings: "cv01", "ss03"; }
   .chart-wrap { position: relative; height: 260px; }
   .chart-wrap.tall { height: 340px; }
+  .chart-card.compact .chart-wrap { height: 220px; }
 
   table { width: 100%; border-collapse: collapse; }
   th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 510; color: var(--text-tertiary); border-bottom: 1px solid var(--border-standard); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-sans); }
@@ -280,13 +282,13 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .export-btn .icon { font-size: 11px; opacity: 0.7; }
 
   /* Heatmap */
-  .heatmap-wrap { display: flex; flex-direction: column; gap: 6px; padding: 4px 0; position: relative; }
-  .heatmap-wrap.is-hovering .heatmap-cell:not(.is-hover) { opacity: 0.38; transition: opacity 0.12s; }
-  .heatmap-row { display: grid; grid-template-columns: 36px repeat(24, 1fr); gap: 3px; align-items: center; }
-  .heatmap-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-quaternary); text-align: right; padding-right: 6px; font-weight: 400; transition: color 0.12s; }
+  .heatmap-wrap { display: flex; flex-direction: column; gap: 7px; padding: 6px 0 2px; position: relative; }
+  .heatmap-row { display: grid; grid-template-columns: 36px repeat(24, 1fr); gap: 4px; align-items: center; }
+  .heatmap-label { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); text-align: right; padding-right: 6px; font-weight: 400; transition: color 0.12s; }
   .heatmap-label.is-hover { color: var(--text-primary); }
-  .heatmap-cell { aspect-ratio: 1; border-radius: 3px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); min-height: 14px; transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s; cursor: pointer; }
-  .heatmap-cell.is-hover { transform: scale(1.25); box-shadow: 0 0 0 1.5px rgba(255,255,255,0.45), 0 6px 14px rgba(0,0,0,0.5); z-index: 2; position: relative; opacity: 1 !important; }
+  .heatmap-cell { aspect-ratio: 1; border-radius: 4px; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.04); min-height: 15px; transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s; cursor: pointer; }
+  .heatmap-cell.is-hover { transform: scale(1.08); box-shadow: 0 0 0 1px rgba(59,130,246,0.90), 0 6px 18px rgba(15,23,42,0.34); border-color: rgba(147,197,253,0.9); z-index: 2; position: relative; }
+  .heatmap-cell.is-selected { box-shadow: 0 0 0 1px rgba(147,197,253,0.85), inset 0 0 0 1px rgba(255,255,255,0.06); border-color: rgba(147,197,253,0.75); }
   .heatmap-summary { margin-top: 14px; padding: 10px 14px; border-radius: 8px; background: var(--surface-ghost); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); letter-spacing: -0.06px; display: flex; flex-wrap: wrap; gap: 18px; }
   .heatmap-summary strong { color: var(--text-primary); font-weight: 500; }
   .heatmap-summary .clear-hour { margin-left: auto; color: var(--accent-bright); cursor: pointer; text-decoration: none; border-bottom: 1px solid rgba(113,112,255,0.4); }
@@ -306,14 +308,14 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .heatmap-tooltip .tt-label { color: var(--text-tertiary); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; display: block; }
   .heatmap-tooltip .tt-val { color: var(--text-primary); font-weight: 500; }
   .heatmap-tooltip .tt-sub { color: var(--text-tertiary); margin-top: 4px; }
-  .heatmap-cell[data-level="0"] { background: rgba(255,255,255,0.02); }
-  .heatmap-cell[data-level="1"] { background: rgba(59,130,246,0.38);  border-color: rgba(59,130,246,0.50); }  /* input sonnet blue */
-  .heatmap-cell[data-level="2"] { background: rgba(167,139,250,0.55); border-color: rgba(167,139,250,0.70); } /* output violet */
-  .heatmap-cell[data-level="3"] { background: rgba(52,211,153,0.75);  border-color: rgba(52,211,153,0.85); }  /* cache read emerald */
-  .heatmap-cell[data-level="4"] { background: rgba(251,191,36,0.95);  border-color: rgba(251,191,36,1.0); }   /* cache creation amber */
-  .heatmap-axis { display: grid; grid-template-columns: 36px repeat(24, 1fr); gap: 3px; margin-top: 4px; font-family: var(--font-mono); font-size: 9px; color: var(--text-quaternary); }
+  .heatmap-cell[data-level="0"] { background: rgba(255,255,255,0.018); border-color: rgba(255,255,255,0.035); }
+  .heatmap-cell[data-level="1"] { background: rgba(59,130,246,0.14); border-color: rgba(59,130,246,0.22); }
+  .heatmap-cell[data-level="2"] { background: rgba(59,130,246,0.30); border-color: rgba(59,130,246,0.40); }
+  .heatmap-cell[data-level="3"] { background: rgba(59,130,246,0.58); border-color: rgba(96,165,250,0.72); }
+  .heatmap-cell[data-level="4"] { background: rgba(59,130,246,0.94); border-color: rgba(191,219,254,0.98); }
+  .heatmap-axis { display: grid; grid-template-columns: 36px repeat(24, 1fr); gap: 4px; margin-top: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
   .heatmap-axis span { text-align: center; }
-  .heatmap-legend { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-family: var(--font-mono); font-size: 10px; color: var(--text-quaternary); }
+  .heatmap-legend { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
   .heatmap-legend .swatches { display: flex; gap: 3px; }
   .heatmap-legend .sw { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--border-subtle); }
 
@@ -435,16 +437,16 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <div class="chart-wrap tall"><canvas id="chart-daily"></canvas></div>
     </div>
     <div class="chart-card">
+      <h2>Cost Efficiency &mdash; $/1K output tokens</h2>
+      <div class="chart-wrap"><canvas id="chart-efficiency"></canvas></div>
+    </div>
+    <div class="chart-card compact">
       <h2>By Model</h2>
       <div class="chart-wrap"><canvas id="chart-model"></canvas></div>
     </div>
-    <div class="chart-card">
+    <div class="chart-card wide">
       <h2>Top Projects by Tokens</h2>
-      <div class="chart-wrap"><canvas id="chart-project"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <h2>Cost Efficiency &mdash; $/1K output tokens</h2>
-      <div class="chart-wrap"><canvas id="chart-efficiency"></canvas></div>
+      <div class="chart-wrap tall"><canvas id="chart-project"></canvas></div>
     </div>
     <div class="chart-card wide">
       <h2>Activity Heatmap &mdash; when you work</h2>
@@ -453,11 +455,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <div class="heatmap-legend">
         <span>Less</span>
         <div class="swatches">
-          <div class="sw" data-level="0" style="background: rgba(255,255,255,0.02);"></div>
-          <div class="sw" style="background: rgba(59,130,246,0.38);"></div>
-          <div class="sw" style="background: rgba(167,139,250,0.55);"></div>
-          <div class="sw" style="background: rgba(52,211,153,0.75);"></div>
-          <div class="sw" style="background: rgba(251,191,36,0.95);"></div>
+          <div class="sw" data-level="0" style="background: rgba(255,255,255,0.018);"></div>
+          <div class="sw" style="background: rgba(59,130,246,0.14);"></div>
+          <div class="sw" style="background: rgba(59,130,246,0.30);"></div>
+          <div class="sw" style="background: rgba(59,130,246,0.58);"></div>
+          <div class="sw" style="background: rgba(59,130,246,0.94);"></div>
         </div>
         <span>More</span>
       </div>
@@ -591,6 +593,20 @@ function fmt(n) {
 }
 function fmtCost(c)    { return '$' + c.toFixed(4); }
 function fmtCostBig(c) { return '$' + c.toFixed(2); }
+function shortModelName(model) {
+  const m = String(model || '');
+  const match = m.match(/(opus|sonnet|haiku)-(\d)-(\d)/i);
+  if (match) {
+    const family = match[1][0].toUpperCase() + match[1].slice(1).toLowerCase();
+    return `${family} ${match[2]}.${match[3]}`;
+  }
+  return m.replace(/^claude-/i, '').replace(/-/g, ' ');
+}
+function compactProjectLabel(project) {
+  const p = String(project || '');
+  if (p.length <= 38) return p;
+  return `${p.slice(0, 12)}…${p.slice(-22)}`;
+}
 
 // ── Chart colors ───────────────────────────────────────────────────────────
 // Multi-hue data palette — saturated, high-contrast on dark. Mixes cool + warm
@@ -924,31 +940,44 @@ function renderModelChart(byModel) {
   const ctx = document.getElementById('chart-model').getContext('2d');
   if (charts.model) charts.model.destroy();
   if (!byModel.length) { charts.model = null; return; }
+  const fullLabels = byModel.map(m => m.model);
+  const shortLabels = fullLabels.map(shortModelName);
   charts.model = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: byModel.map(m => m.model),
+      labels: shortLabels,
       datasets: [{ data: byModel.map(m => m.input + m.output), backgroundColor: byModel.map((_, i) => MODEL_COLORS[i % MODEL_COLORS.length]), borderWidth: 2, borderColor: '#08090a' }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
+      cutout: '68%',
       plugins: {
-        legend: { position: 'bottom', labels: { color: TICK_COLOR, boxWidth: 12, font: { size: 12 } } },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${fmt(ctx.raw)} tokens` } }
+        legend: {
+          position: 'right',
+          labels: { color: '#8a8f98', boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: 'circle', padding: 14, font: { size: 12, weight: '500' } }
+        },
+        tooltip: {
+          callbacks: {
+            title: (items) => fullLabels[items[0].dataIndex] || items[0].label,
+            label: ctx => ` ${fmt(ctx.raw)} tokens`
+          }
+        }
       }
     }
   });
 }
 
 function renderProjectChart(byProject) {
-  const top = byProject.slice(0, 10);
+  const top = byProject.slice(0, 8);
   const ctx = document.getElementById('chart-project').getContext('2d');
   if (charts.project) charts.project.destroy();
   if (!top.length) { charts.project = null; return; }
+  const fullLabels = top.map(p => p.project);
+  const shortLabel = (project) => compactProjectLabel(project);
   charts.project = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: top.map(p => p.project.length > 22 ? '\u2026' + p.project.slice(-20) : p.project),
+      labels: fullLabels.map(shortLabel),
       datasets: [
         { label: 'Input',  data: top.map(p => p.input),  backgroundColor: TOKEN_COLORS.input },
         { label: 'Output', data: top.map(p => p.output), backgroundColor: TOKEN_COLORS.output },
@@ -956,10 +985,17 @@ function renderProjectChart(byProject) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: TICK_COLOR, boxWidth: 12, font: { size: 12 } } } },
+      plugins: {
+        legend: { labels: { color: TICK_COLOR, boxWidth: 12, font: { size: 12 } } },
+        tooltip: {
+          callbacks: {
+            title: (items) => fullLabels[items[0].dataIndex] || items[0].label
+          }
+        }
+      },
       scales: {
         x: { ticks: { color: TICK_COLOR, callback: v => fmt(v) }, grid: { color: GRID_COLOR } },
-        y: { ticks: { color: TICK_COLOR, font: { size: 12 } }, grid: { color: GRID_COLOR } },
+        y: { ticks: { color: '#d0d6e0', font: { size: 13, weight: '500' } }, grid: { color: GRID_COLOR } },
       }
     }
   });
@@ -1167,7 +1203,10 @@ function renderHeatmap() {
   wrap.innerHTML = ordered.map(({ label, row, nativeDow }, ui) => `
     <div class="heatmap-row" data-ui="${ui}">
       <div class="heatmap-label" data-ui="${ui}">${label}</div>
-      ${row.map((v, h) => `<div class="heatmap-cell" data-level="${level(v)}" data-dow="${nativeDow}" data-ui="${ui}" data-hour="${h}" data-turns="${v}" data-tokens="${ordered[ui].tokens[h]}"></div>`).join('')}
+      ${row.map((v, h) => {
+        const isSelected = selectedHour && selectedHour.dow === nativeDow && selectedHour.hour === h;
+        return `<div class="heatmap-cell${isSelected ? ' is-selected' : ''}" data-level="${level(v)}" data-dow="${nativeDow}" data-ui="${ui}" data-hour="${h}" data-turns="${v}" data-tokens="${ordered[ui].tokens[h]}"></div>`;
+      }).join('')}
     </div>
   `).join('');
 
@@ -1209,7 +1248,6 @@ function renderHeatmap() {
   const cells = wrap.querySelectorAll('.heatmap-cell');
   cells.forEach(cell => {
     cell.addEventListener('mouseenter', (e) => {
-      wrap.classList.add('is-hovering');
       cell.classList.add('is-hover');
       const ui = cell.dataset.ui;
       wrap.querySelector(`.heatmap-label[data-ui="${ui}"]`)?.classList.add('is-hover');
@@ -1230,7 +1268,6 @@ function renderHeatmap() {
     });
     cell.addEventListener('mousemove', positionHeatmapTooltip);
     cell.addEventListener('mouseleave', () => {
-      wrap.classList.remove('is-hovering');
       cell.classList.remove('is-hover');
       wrap.querySelectorAll('.heatmap-label.is-hover').forEach(l => l.classList.remove('is-hover'));
       tooltip.classList.remove('visible');

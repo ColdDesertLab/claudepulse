@@ -2,6 +2,15 @@
 
 All notable changes to claudepulse will be documented here.
 
+## [1.1.2] - 2026-04-09
+
+### Changed
+- Heatmap visual system rebuilt into a clean Sonnet-blue intensity ramp so the cells read crisp on dark background instead of muddy/grainy. The legend now matches the same blue-family progression.
+- Heatmap hover no longer darkens the rest of the grid. Focus is now handled with a lighter outline and subtler lift, which keeps surrounding context readable while the tooltip is open.
+- Active heatmap filters now stay visibly selected so the filtered hour remains obvious after click.
+- Chart hierarchy rebalanced: Cost Efficiency now sits higher, By Model is de-emphasized as a compact card, and Top Projects gets a full-width tall chart for better label breathing room.
+- Screenshot refreshed to match the updated dashboard layout and heatmap treatment.
+
 ## [1.1.1] - 2026-04-08
 
 ### Changed
