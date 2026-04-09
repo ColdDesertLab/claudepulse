@@ -287,8 +287,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .heatmap-label { font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); text-align: right; padding-right: 6px; font-weight: 400; transition: color 0.12s; }
   .heatmap-label.is-hover { color: var(--text-primary); }
   .heatmap-cell { aspect-ratio: 1; border-radius: 4px; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.04); min-height: 15px; transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s; cursor: pointer; }
-  .heatmap-cell.is-hover { transform: scale(1.08); box-shadow: 0 0 0 1px rgba(59,130,246,0.90), 0 6px 18px rgba(15,23,42,0.34); border-color: rgba(147,197,253,0.9); z-index: 2; position: relative; }
-  .heatmap-cell.is-selected { box-shadow: 0 0 0 1px rgba(147,197,253,0.85), inset 0 0 0 1px rgba(255,255,255,0.06); border-color: rgba(147,197,253,0.75); }
+  .heatmap-cell.is-hover { transform: scale(1.08); box-shadow: 0 0 0 1px rgba(255,255,255,0.42), 0 6px 18px rgba(15,23,42,0.34); border-color: rgba(255,255,255,0.32); z-index: 2; position: relative; }
+  .heatmap-cell.is-selected { box-shadow: 0 0 0 1px rgba(255,255,255,0.38), inset 0 0 0 1px rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.28); }
   .heatmap-summary { margin-top: 14px; padding: 10px 14px; border-radius: 8px; background: var(--surface-ghost); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); letter-spacing: -0.06px; display: flex; flex-wrap: wrap; gap: 18px; }
   .heatmap-summary strong { color: var(--text-primary); font-weight: 500; }
   .heatmap-summary .clear-hour { margin-left: auto; color: var(--accent-bright); cursor: pointer; text-decoration: none; border-bottom: 1px solid rgba(113,112,255,0.4); }
@@ -309,10 +309,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   .heatmap-tooltip .tt-val { color: var(--text-primary); font-weight: 500; }
   .heatmap-tooltip .tt-sub { color: var(--text-tertiary); margin-top: 4px; }
   .heatmap-cell[data-level="0"] { background: rgba(255,255,255,0.018); border-color: rgba(255,255,255,0.035); }
-  .heatmap-cell[data-level="1"] { background: rgba(59,130,246,0.14); border-color: rgba(59,130,246,0.22); }
-  .heatmap-cell[data-level="2"] { background: rgba(59,130,246,0.30); border-color: rgba(59,130,246,0.40); }
-  .heatmap-cell[data-level="3"] { background: rgba(59,130,246,0.58); border-color: rgba(96,165,250,0.72); }
-  .heatmap-cell[data-level="4"] { background: rgba(59,130,246,0.94); border-color: rgba(191,219,254,0.98); }
+  .heatmap-cell[data-level="1"] { background: rgba(59,130,246,0.34);  border-color: rgba(59,130,246,0.48); }  /* input / blue */
+  .heatmap-cell[data-level="2"] { background: rgba(167,139,250,0.50); border-color: rgba(167,139,250,0.66); } /* output / purple */
+  .heatmap-cell[data-level="3"] { background: rgba(52,211,153,0.68);  border-color: rgba(52,211,153,0.82); }  /* cache read / green */
+  .heatmap-cell[data-level="4"] { background: rgba(251,191,36,0.90);  border-color: rgba(251,191,36,0.98); }  /* cache creation / yellow */
   .heatmap-axis { display: grid; grid-template-columns: 36px repeat(24, 1fr); gap: 4px; margin-top: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
   .heatmap-axis span { text-align: center; }
   .heatmap-legend { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); }
@@ -456,10 +456,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         <span>Less</span>
         <div class="swatches">
           <div class="sw" data-level="0" style="background: rgba(255,255,255,0.018);"></div>
-          <div class="sw" style="background: rgba(59,130,246,0.14);"></div>
-          <div class="sw" style="background: rgba(59,130,246,0.30);"></div>
-          <div class="sw" style="background: rgba(59,130,246,0.58);"></div>
-          <div class="sw" style="background: rgba(59,130,246,0.94);"></div>
+          <div class="sw" style="background: rgba(59,130,246,0.34);"></div>
+          <div class="sw" style="background: rgba(167,139,250,0.50);"></div>
+          <div class="sw" style="background: rgba(52,211,153,0.68);"></div>
+          <div class="sw" style="background: rgba(251,191,36,0.90);"></div>
         </div>
         <span>More</span>
       </div>

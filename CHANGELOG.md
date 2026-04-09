@@ -2,6 +2,13 @@
 
 All notable changes to claudepulse will be documented here.
 
+## [1.1.3] - 2026-04-09
+
+### Changed
+- Heatmap palette redone again for actual system consistency: the four active levels now use the same app colors already used throughout the dashboard — blue, purple, green, and yellow — instead of a blue-only ramp.
+- Heatmap hover and selected states now use neutral white focus rings so interaction styling does not fight the chart colors.
+- Screenshot refreshed to reflect the corrected heatmap palette.
+
 ## [1.1.2] - 2026-04-09
 
 ### Changed
